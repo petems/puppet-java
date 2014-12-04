@@ -15,17 +15,19 @@ class java (
   $jdk_dir = "/Library/Java/JavaVirtualMachines/jdk1.7.0_${update_version}.jdk"
   $sec_dir = "${jdk_dir}/Contents/Home/jre/lib/security"
 
-  package {
-    "jre-7u${update_version}.dmg":
-      ensure   => present,
-      alias    => 'java-jre',
-      provider => pkgdmg,
-      source   => $jre_url ;
-    "jdk-7u${update_version}.dmg":
-      ensure   => present,
-      alias    => 'java',
-      provider => pkgdmg,
-      source   => $jdk_url ;
+  if ($::java_patch_level >= $update_version) {
+    package {
+      "jre-7u${update_version}.dmg":
+        ensure   => present,
+        alias    => 'java-jre',
+        provider => pkgdmg,
+        source   => $jre_url ;
+      "jdk-7u${update_version}.dmg":
+        ensure   => present,
+        alias    => 'java',
+        provider => pkgdmg,
+        source   => $jdk_url ;
+    }
   }
 
   file { $wrapper:
